@@ -100,3 +100,16 @@ By default, the script uses your deployed /predict/ endpoint.
 (Optional) --url and --api-key if auth is required
 
 python test_server.py --image ./assets/sample.jpeg --url https://... --api-key sk_abc123
+
+
+# Additional Features
+## Continuous Integration (CI)
+
+This repository uses GitHub Actions to automatically:
+Build the Docker image on every push or pull request to main or master.
+
+# Future Improvements
+
+Embed preprocessing steps into the ONNX model graph to reduce runtime preprocessing and streamline deployment further.
+Add unit tests and API monitoring for deeper integration testing and performance monitoring.
+
