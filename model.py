@@ -8,13 +8,16 @@ import torchvision.transforms as transforms
 
 class ImagePreprocessor:
     def __init__(self):
-        self.transform = transforms.Compose([
-            transforms.Resize((224, 224)),
-            transforms.CenterCrop((224, 224)),
-            transforms.ToTensor(),
-            transforms.Normalize(mean=[0.485, 0.456, 0.406],
-                                 std=[0.229, 0.224, 0.225])
-        ])
+        self.transform = transforms.Compose(
+            [
+                transforms.Resize((224, 224)),
+                transforms.CenterCrop((224, 224)),
+                transforms.ToTensor(),
+                transforms.Normalize(
+                    mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]
+                ),
+            ]
+        )
 
     def preprocess(self, image_path: str) -> np.ndarray:
         img = Image.open(image_path).convert("RGB")
@@ -24,7 +27,9 @@ class ImagePreprocessor:
 
 class OnnxModel:
     def __init__(self, model_path: str = "model_output/model.onnx"):
-        self.session = ort.InferenceSession(model_path, providers=["CPUExecutionProvider"])
+        self.session = ort.InferenceSession(
+            model_path, providers=["CPUExecutionProvider"]
+        )
         self.input_name = self.session.get_inputs()[0].name
         self.output_name = self.session.get_outputs()[0].name
 

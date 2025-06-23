@@ -10,9 +10,11 @@ app = FastAPI()
 model = OnnxModel()
 preprocessor = ImagePreprocessor()
 
+
 @app.get("/health")
 def health_check():
     return {"status": "running"}
+
 
 @app.post("/predict/")
 async def predict(file: UploadFile = File(...)):

@@ -33,9 +33,7 @@ def conv3x3(
 
 def conv1x1(in_planes: int, out_planes: int, stride: int = 1) -> nn.Conv2d:
     """1x1 convolution"""
-    return nn.Conv2d(
-        in_planes, out_planes, kernel_size=1, stride=stride, bias=False
-    )
+    return nn.Conv2d(in_planes, out_planes, kernel_size=1, stride=stride, bias=False)
 
 
 class BasicBlock(nn.Module):
@@ -56,13 +54,9 @@ class BasicBlock(nn.Module):
         if norm_layer is None:
             norm_layer = nn.BatchNorm2d
         if groups != 1 or base_width != 64:
-            raise ValueError(
-                "BasicBlock only supports groups=1 and base_width=64"
-            )
+            raise ValueError("BasicBlock only supports groups=1 and base_width=64")
         if dilation > 1:
-            raise NotImplementedError(
-                "Dilation > 1 not supported in BasicBlock"
-            )
+            raise NotImplementedError("Dilation > 1 not supported in BasicBlock")
         # Both self.conv1 and self.downsample layers downsample the input when stride != 1
         self.conv1 = conv3x3(inplanes, planes, stride)
         self.bn1 = norm_layer(planes)
@@ -212,9 +206,7 @@ class Classifier(nn.Module):
 
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
-                nn.init.kaiming_normal_(
-                    m.weight, mode="fan_out", nonlinearity="relu"
-                )
+                nn.init.kaiming_normal_(m.weight, mode="fan_out", nonlinearity="relu")
             elif isinstance(m, (nn.BatchNorm2d, nn.GroupNorm)):
                 nn.init.constant_(m.weight, 1)
                 nn.init.constant_(m.bias, 0)
@@ -299,7 +291,7 @@ class Classifier(nn.Module):
         return self._forward_impl(x)
 
     def preprocess_numpy(self, img):
-        resize = transforms.Resize((224, 224))   #must same as here
+        resize = transforms.Resize((224, 224))  # must same as here
         crop = transforms.CenterCrop((224, 224))
         to_tensor = transforms.ToTensor()
         normalize = transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
@@ -314,9 +306,9 @@ if __name__ == "__main__":
     mtailor = Classifier(BasicBlock, [2, 2, 2, 2])
     mtailor.load_state_dict(torch.load("./resnet18-f37072fd.pth"))
     mtailor.eval()
-    
+
     img = Image.open("./n01667114_mud_turtle.JPEG")
-    inp = mtailor.preprocess_numpy(img).unsqueeze(0) 
+    inp = mtailor.preprocess_numpy(img).unsqueeze(0)
     res = mtailor.forward(inp)
 
     print(torch.argmax(res))
